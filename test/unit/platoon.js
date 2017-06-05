@@ -83,17 +83,45 @@ describe('Platoon', () => {
             });
 
             it('should call travel() for each stopover on each deLorean with the scaled distance', () => {
-                platoon.travel(distance);
-
-                expect(vehicles[0].deLorean.travel).to.have.been.calledTwice;
-                expect(vehicles[0].deLorean.travel).to.have.been.calledWithExactly(position * vehicles[0].scale);
-                expect(vehicles[0].deLorean.travel).to.have.been.calledWithExactly((distance - position) * vehicles[0].scale);
-                expect(vehicles[1].deLorean.travel).to.have.been.calledTwice;
-                expect(vehicles[1].deLorean.travel).to.have.been.calledWithExactly(position * vehicles[1].scale);
-                expect(vehicles[1].deLorean.travel).to.have.been.calledWithExactly((distance - position) * vehicles[1].scale);
+                return platoon
+                    .travel(distance)
+                    .then(() => {
+                        expect(vehicles[0].deLorean.travel).to.have.been.calledTwice;
+                        expect(vehicles[0].deLorean.travel).to.have.been.calledWithExactly(position * vehicles[0].scale);
+                        expect(vehicles[0].deLorean.travel).to.have.been.calledWithExactly((distance - position) * vehicles[0].scale);
+                        expect(vehicles[1].deLorean.travel).to.have.been.calledTwice;
+                        expect(vehicles[1].deLorean.travel).to.have.been.calledWithExactly(position * vehicles[1].scale);
+                        expect(vehicles[1].deLorean.travel).to.have.been.calledWithExactly((distance - position) * vehicles[1].scale);
+                    });
             });
 
         });
+
+        describe('with a promise scheduled to resolve', () => {
+
+            let func;
+            let position;
+
+            beforeEach(() => {
+                func = spy();
+                position = 1;
+
+                new Promise((resolve) => {
+                    vehicles[0].deLorean.schedule(position * vehicles[0].scale, resolve);
+                }).then(func);
+            });
+
+            it('shoud execute a scheduled function at the desired position', () => {
+                return platoon
+                    .travel(position)
+                    .then(() => {
+                        expect(func).to.have.been.calledOnce;
+                    });
+            });
+
+        });
+
+
 
     });
 

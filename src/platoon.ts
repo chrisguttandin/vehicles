@@ -25,14 +25,14 @@ export class Platoon implements IVehicle {
         this._vehicles.forEach(({ deLorean }) => deLorean.reset());
     }
 
-    public travel (distance: number) {
+    public async travel (distance: number) {
         do {
             const distanceToNextStopover = this._vehicles
                 .reduce((distance, { deLorean, scale }) => {
                     return Math.min((deLorean.nextStopover - deLorean.position) / scale, distance);
                 }, distance);
 
-            this._vehicles.forEach(({ deLorean, scale }) => deLorean.travel(distanceToNextStopover * scale));
+            await Promise.all(this._vehicles.map(({ deLorean, scale }) => deLorean.travel(distanceToNextStopover * scale)));
 
             distance -= distanceToNextStopover;
         } while (distance > 0)

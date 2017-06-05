@@ -45,7 +45,7 @@ export class DeLorean implements IVehicle {
         return ticket;
     }
 
-    public travel (distance: number) {
+    public async travel (distance: number) {
         const position = this._position += distance;
 
         while (this._definitions.length > 0 && this._definitions[0].position <= position) {
@@ -53,7 +53,7 @@ export class DeLorean implements IVehicle {
             const { func, position } = <IDefinition> this._definitions.shift();
 
             this._position = position;
-            func();
+            await Promise.race([ func(), Promise.reject(new Error("Sorry, it's not allowed to initialize a promise within a scheduled function.")) ]);
         }
 
         this._position = position;

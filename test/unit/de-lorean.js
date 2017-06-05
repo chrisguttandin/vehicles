@@ -192,6 +192,56 @@ describe('DeLorean', () => {
 
         });
 
+        describe('with a promise scheduled to resolve', () => {
+
+            let func;
+
+            beforeEach(() => {
+                func = spy();
+
+                new Promise((resolve) => {
+                    deLorean.schedule(10, resolve);
+                }).then(func);
+            });
+
+            it('shoud execute a scheduled function at the desired position', () => {
+                return deLorean
+                    .travel(9)
+                    .then(() => expect(func).to.have.not.been.called)
+                    .then(() => deLorean.travel(1))
+                    .then(() => expect(func).to.have.been.calledOnce);
+            });
+
+        });
+
+        describe('with a running promise initialized in the scheduled function', () => {
+
+            let func;
+
+            beforeEach(() => {
+                func = spy();
+
+                deLorean.schedule(10, () => {
+                    return new Promise((resolve) => {
+                        resolve();
+                    }).then(func);
+                });
+            });
+
+            it('shoud execute a scheduled function at the desired position', (done) => {
+                deLorean
+                    .travel(9)
+                    .then(() => expect(func).to.have.not.been.called)
+                    .then(() => deLorean.travel(1))
+                    .catch((err) => {
+                        expect(err.message).to.equal("Sorry, it's not allowed to initialize a promise within a scheduled function.");
+
+                        done();
+                    });
+            });
+
+        });
+
         describe('with a canceled function', () => {
 
             let func;

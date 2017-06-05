@@ -8,6 +8,14 @@ export default {
     plugins: [
         babel({
             exclude: 'node_modules/**',
+            plugins: [
+                [
+                    'transform-runtime',
+                    {
+                        moduleName: 'babel-runtime'
+                    }
+                ]
+            ],
             presets: [
                 [
                     'es2015',
@@ -15,7 +23,8 @@ export default {
                         modules: false
                     }
                 ]
-            ]
+            ],
+            runtimeHelpers: true
         })
     ]
 };

@@ -192,16 +192,17 @@ describe('DeLorean', () => {
 
         });
 
-        describe('with a promise scheduled to resolve', () => {
+        describe('with a scheduled function returning a promise which resolves in its mircotask', () => {
 
             let func;
 
             beforeEach(() => {
                 func = spy();
 
-                new Promise((resolve) => {
-                    deLorean.schedule(10, resolve);
-                }).then(func);
+                deLorean.schedule(10, () => {
+                    return new Promise((resolve) => resolve())
+                        .then(func);
+                });
             });
 
             it('shoud execute a scheduled function at the desired position', () => {
@@ -214,7 +215,7 @@ describe('DeLorean', () => {
 
         });
 
-        describe('with a running promise initialized in the scheduled function', () => {
+        describe('with a scheduled function returning a promise which does not resolve in its mircotask', () => {
 
             let func;
 
@@ -223,12 +224,13 @@ describe('DeLorean', () => {
 
                 deLorean.schedule(10, () => {
                     return new Promise((resolve) => {
-                        resolve();
-                    }).then(func);
+                        setTimeout(() => resolve()); // eslint-disable-line no-undef
+                    })
+                        .then(func);
                 });
             });
 
-            it('shoud execute a scheduled function at the desired position', (done) => {
+            it('shoud throw an error', (done) => {
                 deLorean
                     .travel(9)
                     .then(() => expect(func).to.have.not.been.called)

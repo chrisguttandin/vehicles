@@ -1,5 +1,8 @@
 import { IDefinition, IVehicle } from './interfaces';
 
+// @todo This is normally part of the TypeScript lib 'dom' or of @types/node.
+declare function setTimeout(handler: any): number;
+
 const MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || Math.pow(2, 53) - 1;
 
 export class DeLorean implements IVehicle {
@@ -53,7 +56,7 @@ export class DeLorean implements IVehicle {
             const { func, position } = <IDefinition> this._definitions.shift();
 
             this._position = position;
-            await Promise.race([ func(), Promise.reject(new Error("Sorry, it's not allowed to initialize a promise within a scheduled function.")) ]);
+            await Promise.race([ new Promise((_, reject) => setTimeout(() => reject(new Error("Sorry, it's not allowed to initialize a promise within a scheduled function.")))), func() ]);
         }
 
         this._position = position;

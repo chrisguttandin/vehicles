@@ -244,6 +244,31 @@ describe('DeLorean', () => {
 
         });
 
+        describe('with two functions scheduled at the same time', () => {
+
+            let functions;
+
+            beforeEach(() => {
+                functions = [ spy(), spy() ];
+
+                deLorean.schedule(10, functions[0]);
+                deLorean.schedule(10, functions[1]);
+            });
+
+            it('shoud execute both scheduled functions at the desired position', () => {
+                deLorean.travel(9);
+
+                expect(functions[0]).to.have.not.been.called;
+                expect(functions[1]).to.have.not.been.called;
+
+                deLorean.travel(1);
+
+                expect(functions[0]).to.have.been.calledOnce;
+                expect(functions[1]).to.have.been.calledOnce;
+            });
+
+        });
+
         describe('with a canceled function', () => {
 
             let func;

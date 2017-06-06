@@ -1,3 +1,6 @@
 {
-  "extends": "../node_modules/tsconfig-holy-grail/src/tsconfig-universal"
+  "extends": "../node_modules/tsconfig-holy-grail/src/tsconfig-universal",
+  "types": [
+    "decimal.js"
+  ]
 }

@@ -1,3 +1,4 @@
+import Decimal from 'decimal.js';
 import { IDefinition, IVehicle } from './interfaces';
 
 // @todo This is normally part of the TypeScript lib 'dom' or of @types/node.
@@ -49,7 +50,7 @@ export class DeLorean implements IVehicle {
     }
 
     public async travel (distance: number) {
-        const position = this._position += distance;
+        const position = new Decimal(this._position).plus(distance).toNumber();
 
         while (this._definitions.length > 0 && this._definitions[0].position <= position) {
             // TypeScript needs to be convinced that the definition is not undefined.

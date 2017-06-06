@@ -1,3 +1,4 @@
+import Decimal from 'decimal.js';
 import { DeLorean } from './de-lorean';
 import { IVehicle } from './interfaces';
 
@@ -26,16 +27,27 @@ export class Platoon implements IVehicle {
     }
 
     public async travel (distance: number) {
+        let distanceAsDecimal = new Decimal(distance);
+
         do {
             const distanceToNextStopover = this._vehicles
-                .reduce((distance, { deLorean, scale }) => {
-                    return Math.min((deLorean.nextStopover - deLorean.position) / scale, distance);
-                }, distance);
+                .reduce((distanceAsDecimal, { deLorean, scale }) => {
+                    const nextStopoverAsDecimal = new Decimal(deLorean.nextStopover);
 
-            await Promise.all(this._vehicles.map(({ deLorean, scale }) => deLorean.travel(distanceToNextStopover * scale)));
+                    return Decimal.min(
+                        nextStopoverAsDecimal
+                            .minus(deLorean.position)
+                            .dividedBy(scale),
+                        distanceAsDecimal
+                    );
+                }, distanceAsDecimal);
 
-            distance -= distanceToNextStopover;
-        } while (distance > 0)
+            await Promise.all(this._vehicles.map(({ deLorean, scale }) => {
+                return deLorean.travel(distanceToNextStopover.times(scale).toNumber());
+            }));
+
+            distanceAsDecimal = distanceAsDecimal.minus(distanceToNextStopover);
+        } while (distanceAsDecimal.greaterThan(0))
     }
 
 }

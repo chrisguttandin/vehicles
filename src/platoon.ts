@@ -4,9 +4,12 @@ import { IVehicle } from './interfaces';
 
 export class Platoon implements IVehicle {
 
+    private _ongoingJourney: null | Symbol;
+
     private _vehicles: { deLorean: DeLorean, scale: number }[];
 
     constructor (...vehicles: { deLorean: DeLorean, scale: number }[]) {
+        this._ongoingJourney = null;
         this._vehicles = vehicles;
     }
 
@@ -23,10 +26,19 @@ export class Platoon implements IVehicle {
     }
 
     public reset () {
+        this._ongoingJourney = null;
         this._vehicles.forEach(({ deLorean }) => deLorean.reset());
     }
 
     public async travel (distance: number) {
+        if (this._ongoingJourney !== null) {
+            throw new Error('There is currently another journey going on.');
+        }
+
+        const journey = Symbol();
+
+        this._ongoingJourney = journey;
+
         let distanceAsDecimal = new Decimal(distance);
 
         do {
@@ -47,7 +59,11 @@ export class Platoon implements IVehicle {
             }));
 
             distanceAsDecimal = distanceAsDecimal.minus(distanceToNextStopover);
-        } while (distanceAsDecimal.greaterThan(0))
+        } while (this._ongoingJourney === journey && distanceAsDecimal.greaterThan(0))
+
+        if (this._ongoingJourney === journey) {
+            this._ongoingJourney = null;
+        }
     }
 
 }

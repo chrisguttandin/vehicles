@@ -1,5 +1,7 @@
 # vehicles
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/chrisguttandin/vehicles.svg)](https://greenkeeper.io/)
+
 **A little test utility to travel into the future.**
 
 [![tests](https://img.shields.io/travis/chrisguttandin/vehicles/master.svg?style=flat-square)](https://travis-ci.org/chrisguttandin/vehicles)

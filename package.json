@@ -4,6 +4,10 @@
   "bugs": {
     "url": "https://github.com/chrisguttandin/vehicles/issues"
   },
+  "dependencies": {
+    "babel-runtime": "^6.23.0",
+    "decimal.js": "^7.2.3"
+  },
   "description": "A little test utility to travel into the future.",
   "devDependencies": {
     "@types/decimal.js": "0.0.30",
@@ -56,12 +60,12 @@
     "build/node/",
     "src/"
   ],
+  "homepage": "https://github.com/chrisguttandin/vehicles",
   "keywords": [
     "scheduler",
     "testing",
     "timer"
   ],
-  "homepage": "https://github.com/chrisguttandin/vehicles",
   "license": "MIT",
   "main": "build/node/module.js",
   "module": "build/esm/module.js",
@@ -72,13 +76,9 @@
   },
   "scripts": {
     "precommit": "grunt lint",
-    "prepublish": "grunt build",
+    "prepublishOnly": "grunt build",
     "test": "grunt lint && grunt test"
   },
   "types": "build/es2015/module.d.ts",
-  "version": "2.2.1",
-  "dependencies": {
-    "babel-runtime": "^6.23.0",
-    "decimal.js": "^7.2.3"
-  }
+  "version": "2.2.1"
 }

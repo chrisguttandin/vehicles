@@ -5,7 +5,7 @@
     "url": "https://github.com/chrisguttandin/vehicles/issues"
   },
   "dependencies": {
-    "babel-runtime": "^6.23.0",
+    "babel-runtime": "^6.25.0",
     "decimal.js": "^7.2.3"
   },
   "description": "A little test utility to travel into the future.",

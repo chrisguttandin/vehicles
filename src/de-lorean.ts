@@ -1,8 +1,8 @@
 import Decimal from 'decimal.js';
-import { IDefinition, IVehicle } from './interfaces';
+import { IDefinition, IVehicle } from './interfaces';
 
 // @todo This is normally part of the TypeScript lib 'dom' or of @types/node.
-declare function setTimeout(handler: any): number;
+declare function setTimeout (handler: any): number;
 
 const MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || Math.pow(2, 53) - 1;
 
@@ -31,7 +31,7 @@ export class DeLorean implements IVehicle {
     }
 
     public cancel (ticket: number) {
-        const index = this._definitions.findIndex(({ ticket: tckt }) => ticket === tckt);
+        const index = this._definitions.findIndex(({ ticket: tckt }) => ticket === tckt);
 
         if (index > -1) {
             this._definitions.splice(index, 1);
@@ -65,25 +65,25 @@ export class DeLorean implements IVehicle {
 
         while (this._ongoingJourney === journey && this._definitions.length > 0 && this._definitions[0].position <= position) {
             // TypeScript needs to be convinced that the definition is not undefined.
-            const { func, position } = <IDefinition> this._definitions.shift();
+            const { func, position: pstn } = <IDefinition> this._definitions.shift();
 
             const functions = [ func ];
 
-            while (this._definitions.length > 0 && this._definitions[0].position === position) {
+            while (this._definitions.length > 0 && this._definitions[0].position === pstn) {
                 // TypeScript needs to be convinced that the definition is not undefined.
                 functions.push((<IDefinition> this._definitions.shift()).func);
             }
 
-            this._position = position;
+            this._position = pstn;
 
             await Promise
                 .all(functions
-                    .map((func) => Promise
+                    .map((fnc) => Promise
                         .race([
                             new Promise((_, reject) => setTimeout(() => {
                                 reject(new Error("Sorry, it's not allowed to initialize a promise within a scheduled function."));
                             })),
-                            func()
+                            fnc()
                         ])));
         }
 
@@ -98,7 +98,7 @@ export class DeLorean implements IVehicle {
 
         do {
             ticket = Math.round(Math.random() * MAX_SAFE_INTEGER);
-        } while (this._definitions.some(({ ticket: tckt }) => ticket === tckt))
+        } while (this._definitions.some(({ ticket: tckt }) => ticket === tckt));
 
         return ticket;
     }

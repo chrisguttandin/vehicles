@@ -1,6 +1,6 @@
 import Decimal from 'decimal.js';
-import { DeLorean } from './de-lorean';
-import { IVehicle } from './interfaces';
+import { DeLorean } from './de-lorean';
+import { IVehicle } from './interfaces';
 
 export class Platoon implements IVehicle {
 
@@ -18,7 +18,7 @@ export class Platoon implements IVehicle {
     }
 
     public leave (deLorean: DeLorean) {
-        const index = this._vehicles.findIndex(({ deLorean: dLrn }) => deLorean === dLrn);
+        const index = this._vehicles.findIndex(({ deLorean: dLrn }) => deLorean === dLrn);
 
         if (index > -1) {
             this._vehicles.splice(index, 1);
@@ -27,7 +27,7 @@ export class Platoon implements IVehicle {
 
     public reset () {
         this._ongoingJourney = null;
-        this._vehicles.forEach(({ deLorean }) => deLorean.reset());
+        this._vehicles.forEach(({ deLorean }) => deLorean.reset());
     }
 
     public async travel (distance: number) {
@@ -43,23 +43,23 @@ export class Platoon implements IVehicle {
 
         do {
             const distanceToNextStopover = this._vehicles
-                .reduce((distanceAsDecimal, { deLorean, scale }) => {
+                .reduce((dstncSDcml, { deLorean, scale }) => {
                     const nextStopoverAsDecimal = new Decimal(deLorean.nextStopover);
 
                     return Decimal.min(
                         nextStopoverAsDecimal
                             .minus(deLorean.position)
                             .dividedBy(scale),
-                        distanceAsDecimal
+                        dstncSDcml
                     );
                 }, distanceAsDecimal);
 
-            await Promise.all(this._vehicles.map(({ deLorean, scale }) => {
+            await Promise.all(this._vehicles.map(({ deLorean, scale }) => {
                 return deLorean.travel(distanceToNextStopover.times(scale).toNumber());
             }));
 
             distanceAsDecimal = distanceAsDecimal.minus(distanceToNextStopover);
-        } while (this._ongoingJourney === journey && distanceAsDecimal.greaterThan(0))
+        } while (this._ongoingJourney === journey && distanceAsDecimal.greaterThan(0));
 
         if (this._ongoingJourney === journey) {
             this._ongoingJourney = null;

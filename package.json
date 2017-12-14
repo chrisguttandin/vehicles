@@ -6,7 +6,7 @@
   },
   "dependencies": {
     "babel-runtime": "^6.26.0",
-    "decimal.js": "^8.0.0",
+    "decimal.js": "^9.0.0",
     "tslib": "^1.8.1"
   },
   "description": "A little test utility to travel into the future.",

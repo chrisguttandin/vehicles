@@ -59,7 +59,9 @@ export class DeLorean implements IVehicle {
         }
 
         const journey = Symbol();
-        const position = new Decimal(this._position).plus(distance).toNumber();
+        const position = new Decimal(this._position)
+            .plus(distance)
+            .toNumber();
 
         this._ongoingJourney = journey;
 

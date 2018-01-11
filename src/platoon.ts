@@ -55,7 +55,9 @@ export class Platoon implements IVehicle {
                 }, distanceAsDecimal);
 
             await Promise.all(this._vehicles.map(({ deLorean, scale }) => {
-                return deLorean.travel(distanceToNextStopover.times(scale).toNumber());
+                return deLorean.travel(distanceToNextStopover
+                    .times(scale)
+                    .toNumber());
             }));
 
             distanceAsDecimal = distanceAsDecimal.minus(distanceToNextStopover);

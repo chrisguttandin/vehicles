@@ -72,6 +72,12 @@
     "src/"
   ],
   "homepage": "https://github.com/chrisguttandin/vehicles",
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint --edit --extends @commitlint/config-angular",
+      "pre-commit": "grunt lint"
+    }
+  },
   "keywords": [
     "scheduler",
     "testing",
@@ -86,8 +92,6 @@
     "url": "https://github.com/chrisguttandin/vehicles.git"
   },
   "scripts": {
-    "commitmsg": "commitlint --edit --extends @commitlint/config-angular",
-    "precommit": "grunt lint",
     "prepublishOnly": "grunt build",
     "test": "grunt lint && grunt test"
   },

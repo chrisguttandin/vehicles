@@ -20,17 +20,17 @@ export class DeLorean implements IVehicle {
         this._position = 0;
     }
 
-    get nextStopover () {
+    get nextStopover (): number {
         const nextDefinition = this._definitions[0];
 
         return (nextDefinition === undefined) ? Number.POSITIVE_INFINITY : nextDefinition.position;
     }
 
-    get position () {
+    get position (): number {
         return this._position;
     }
 
-    public cancel (ticket: number) {
+    public cancel (ticket: number): void {
         const index = this._definitions.findIndex(({ ticket: tckt }) => ticket === tckt);
 
         if (index > -1) {
@@ -38,13 +38,13 @@ export class DeLorean implements IVehicle {
         }
     }
 
-    public reset () {
+    public reset (): void {
         this._definitions.length = 0;
         this._ongoingJourney = null;
         this._position = 0;
     }
 
-    public schedule (position: number, func: Function) {
+    public schedule (position: number, func: Function): number {
         const ticket = this._generateTicket();
 
         this._definitions.push({ func, position, ticket });
@@ -53,7 +53,7 @@ export class DeLorean implements IVehicle {
         return ticket;
     }
 
-    public async travel (distance: number) {
+    public async travel (distance: number): Promise<void> {
         if (this._ongoingJourney !== null) {
             throw new Error('There is currently another journey going on.');
         }
@@ -95,7 +95,7 @@ export class DeLorean implements IVehicle {
         }
     }
 
-    private _generateTicket () {
+    private _generateTicket (): number {
         let ticket: number;
 
         do {

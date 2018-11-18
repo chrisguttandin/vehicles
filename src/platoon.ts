@@ -13,11 +13,11 @@ export class Platoon implements IVehicle {
         this._vehicles = vehicles;
     }
 
-    public join (deLorean: DeLorean, scale: number) {
+    public join (deLorean: DeLorean, scale: number): void {
         this._vehicles.push({ deLorean, scale });
     }
 
-    public leave (deLorean: DeLorean) {
+    public leave (deLorean: DeLorean): void {
         const index = this._vehicles.findIndex(({ deLorean: dLrn }) => deLorean === dLrn);
 
         if (index > -1) {
@@ -25,12 +25,12 @@ export class Platoon implements IVehicle {
         }
     }
 
-    public reset () {
+    public reset (): void {
         this._ongoingJourney = null;
         this._vehicles.forEach(({ deLorean }) => deLorean.reset());
     }
 
-    public async travel (distance: number) {
+    public async travel (distance: number): Promise<void> {
         if (this._ongoingJourney !== null) {
             throw new Error('There is currently another journey going on.');
         }

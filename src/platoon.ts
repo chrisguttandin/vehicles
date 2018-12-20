@@ -6,9 +6,9 @@ export class Platoon implements IVehicle {
 
     private _ongoingJourney: null | Symbol;
 
-    private _vehicles: { deLorean: DeLorean, scale: number }[];
+    private _vehicles: { deLorean: DeLorean; scale: number }[];
 
-    constructor (...vehicles: { deLorean: DeLorean, scale: number }[]) {
+    constructor (...vehicles: { deLorean: DeLorean; scale: number }[]) {
         this._ongoingJourney = null;
         this._vehicles = vehicles;
     }

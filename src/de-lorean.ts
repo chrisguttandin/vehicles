@@ -4,7 +4,7 @@ import { IDefinition, IVehicle } from './interfaces';
 // @todo This is normally part of the TypeScript lib 'dom' or of @types/node.
 declare function setTimeout (handler: any): number;
 
-const MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER || Math.pow(2, 53) - 1;
+const MAX_SAFE_INTEGER = (Number.MAX_SAFE_INTEGER === undefined) ? Math.pow(2, 53) - 1 : Number.MAX_SAFE_INTEGER;
 
 export class DeLorean implements IVehicle {
 

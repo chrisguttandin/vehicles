@@ -30,7 +30,7 @@ export class Platoon implements IVehicle {
         this._vehicles.forEach(({ deLorean }) => deLorean.reset());
     }
 
-    public async travel (distance: number): Promise<void> {
+    public async travel (distance: number): Promise<void> { // tslint:disable-line:invalid-void
         if (this._ongoingJourney !== null) {
             throw new Error('There is currently another journey going on.');
         }

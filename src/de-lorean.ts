@@ -53,7 +53,7 @@ export class DeLorean implements IVehicle {
         return ticket;
     }
 
-    public async travel (distance: number): Promise<void> {
+    public async travel (distance: number): Promise<void> { // tslint:disable-line:invalid-void
         if (this._ongoingJourney !== null) {
             throw new Error('There is currently another journey going on.');
         }

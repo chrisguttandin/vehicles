@@ -3,29 +3,20 @@ import { DeLorean } from '../../src/de-lorean';
 import { Platoon } from '../../src/platoon';
 
 describe('Platoon', () => {
-
     describe('join()', () => {
-
         // @todo
-
     });
 
     describe('leave()', () => {
-
         // @todo
-
     });
 
     describe('reset()', () => {
-
         let platoon;
         let vehicles;
 
         beforeEach(() => {
-            vehicles = [
-                { deLorean: { reset: spy() } },
-                { deLorean: { reset: spy() } }
-            ];
+            vehicles = [{ deLorean: { reset: spy() } }, { deLorean: { reset: spy() } }];
 
             platoon = new Platoon(...vehicles);
         });
@@ -36,11 +27,9 @@ describe('Platoon', () => {
             expect(vehicles[0].deLorean.reset).to.have.been.calledOnce;
             expect(vehicles[1].deLorean.reset).to.have.been.calledOnce;
         });
-
     });
 
     describe('travel()', () => {
-
         let distance;
         let platoon;
         let vehicles;
@@ -60,7 +49,6 @@ describe('Platoon', () => {
         });
 
         describe('without any scheduled function', () => {
-
             it('should call travel() on each deLorean with the scaled distance', () => {
                 platoon.travel(distance);
 
@@ -69,36 +57,30 @@ describe('Platoon', () => {
                 expect(vehicles[1].deLorean.travel).to.have.been.calledOnce;
                 expect(vehicles[1].deLorean.travel).to.have.been.calledWithExactly(distance * vehicles[1].scale);
             });
-
         });
 
         describe('with a scheduled function', () => {
-
             let position;
 
             beforeEach(() => {
                 position = 1;
 
-                vehicles[0].deLorean.schedule(position * vehicles[0].scale, () => { });
+                vehicles[0].deLorean.schedule(position * vehicles[0].scale, () => {});
             });
 
             it('should call travel() for each stopover on each deLorean with the scaled distance', () => {
-                return platoon
-                    .travel(distance)
-                    .then(() => {
-                        expect(vehicles[0].deLorean.travel).to.have.been.calledTwice;
-                        expect(vehicles[0].deLorean.travel).to.have.been.calledWithExactly(position * vehicles[0].scale);
-                        expect(vehicles[0].deLorean.travel).to.have.been.calledWithExactly((distance - position) * vehicles[0].scale);
-                        expect(vehicles[1].deLorean.travel).to.have.been.calledTwice;
-                        expect(vehicles[1].deLorean.travel).to.have.been.calledWithExactly(position * vehicles[1].scale);
-                        expect(vehicles[1].deLorean.travel).to.have.been.calledWithExactly((distance - position) * vehicles[1].scale);
-                    });
+                return platoon.travel(distance).then(() => {
+                    expect(vehicles[0].deLorean.travel).to.have.been.calledTwice;
+                    expect(vehicles[0].deLorean.travel).to.have.been.calledWithExactly(position * vehicles[0].scale);
+                    expect(vehicles[0].deLorean.travel).to.have.been.calledWithExactly((distance - position) * vehicles[0].scale);
+                    expect(vehicles[1].deLorean.travel).to.have.been.calledTwice;
+                    expect(vehicles[1].deLorean.travel).to.have.been.calledWithExactly(position * vehicles[1].scale);
+                    expect(vehicles[1].deLorean.travel).to.have.been.calledWithExactly((distance - position) * vehicles[1].scale);
+                });
             });
-
         });
 
         describe('with a promise scheduled to resolve', () => {
-
             let func;
             let position;
 
@@ -112,17 +94,10 @@ describe('Platoon', () => {
             });
 
             it('shoud execute a scheduled function at the desired position', () => {
-                return platoon
-                    .travel(position)
-                    .then(() => {
-                        expect(func).to.have.been.calledOnce;
-                    });
+                return platoon.travel(position).then(() => {
+                    expect(func).to.have.been.calledOnce;
+                });
             });
-
         });
-
-
-
     });
-
 });

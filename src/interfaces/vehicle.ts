@@ -1,7 +1,5 @@
 export interface IVehicle {
+    reset(): void;
 
-    reset (): void;
-
-    travel (distance: number): void;
-
+    travel(distance: number): void;
 }

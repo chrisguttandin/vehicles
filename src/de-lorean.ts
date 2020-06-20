@@ -2,35 +2,34 @@ import Decimal from 'decimal.js';
 import { IDefinition, IVehicle } from './interfaces';
 
 // @todo This is normally part of the TypeScript lib 'dom' or of @types/node.
-declare function setTimeout (handler: any): number;
+declare function setTimeout(handler: any): number;
 
-const MAX_SAFE_INTEGER = (Number.MAX_SAFE_INTEGER === undefined) ? Math.pow(2, 53) - 1 : Number.MAX_SAFE_INTEGER;
+const MAX_SAFE_INTEGER = Number.MAX_SAFE_INTEGER === undefined ? Math.pow(2, 53) - 1 : Number.MAX_SAFE_INTEGER;
 
 export class DeLorean implements IVehicle {
-
     private _definitions: IDefinition[] = [];
 
     private _ongoingJourney: null | Symbol;
 
     private _position: number;
 
-    constructor () {
+    constructor() {
         this._definitions = [];
         this._ongoingJourney = null;
         this._position = 0;
     }
 
-    get nextStopover (): number {
+    get nextStopover(): number {
         const nextDefinition = this._definitions[0];
 
-        return (nextDefinition === undefined) ? Number.POSITIVE_INFINITY : nextDefinition.position;
+        return nextDefinition === undefined ? Number.POSITIVE_INFINITY : nextDefinition.position;
     }
 
-    get position (): number {
+    get position(): number {
         return this._position;
     }
 
-    public cancel (ticket: number): void {
+    public cancel(ticket: number): void {
         const index = this._definitions.findIndex(({ ticket: tckt }) => ticket === tckt);
 
         if (index > -1) {
@@ -38,13 +37,13 @@ export class DeLorean implements IVehicle {
         }
     }
 
-    public reset (): void {
+    public reset(): void {
         this._definitions.length = 0;
         this._ongoingJourney = null;
         this._position = 0;
     }
 
-    public schedule (position: number, func: Function): number {
+    public schedule(position: number, func: Function): number {
         const ticket = this._generateTicket();
 
         this._definitions.push({ func, position, ticket });
@@ -53,40 +52,41 @@ export class DeLorean implements IVehicle {
         return ticket;
     }
 
-    public async travel (distance: number): Promise<void> {
+    public async travel(distance: number): Promise<void> {
         if (this._ongoingJourney !== null) {
             throw new Error('There is currently another journey going on.');
         }
 
         const journey = Symbol();
-        const position = new Decimal(this._position)
-            .plus(distance)
-            .toNumber();
+        const position = new Decimal(this._position).plus(distance).toNumber();
 
         this._ongoingJourney = journey;
 
         while (this._ongoingJourney === journey && this._definitions.length > 0 && this._definitions[0].position <= position) {
             // TypeScript needs to be convinced that the definition is not undefined.
-            const { func, position: pstn } = <IDefinition> this._definitions.shift();
+            const { func, position: pstn } = <IDefinition>this._definitions.shift();
 
-            const functions = [ func ];
+            const functions = [func];
 
             while (this._definitions.length > 0 && this._definitions[0].position === pstn) {
                 // TypeScript needs to be convinced that the definition is not undefined.
-                functions.push((<IDefinition> this._definitions.shift()).func);
+                functions.push((<IDefinition>this._definitions.shift()).func);
             }
 
             this._position = pstn;
 
-            await Promise
-                .all(functions
-                    .map((fnc) => Promise
-                        .race([
-                            new Promise((_, reject) => setTimeout(() => {
+            await Promise.all(
+                functions.map((fnc) =>
+                    Promise.race([
+                        new Promise((_, reject) =>
+                            setTimeout(() => {
                                 reject(new Error("Sorry, it's not allowed to initialize a promise within a scheduled function."));
-                            })),
-                            fnc()
-                        ])));
+                            })
+                        ),
+                        fnc()
+                    ])
+                )
+            );
         }
 
         if (this._ongoingJourney === journey) {
@@ -95,7 +95,7 @@ export class DeLorean implements IVehicle {
         }
     }
 
-    private _generateTicket (): number {
+    private _generateTicket(): number {
         let ticket: number;
 
         do {
@@ -104,5 +104,4 @@ export class DeLorean implements IVehicle {
 
         return ticket;
     }
-
 }

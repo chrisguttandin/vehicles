@@ -164,7 +164,7 @@ describe('DeLorean', () => {
                 func = spy();
 
                 deLorean.schedule(10, () => {
-                    return new Promise((resolve) => resolve()).then(func);
+                    return Promise.resolve().then(func);
                 });
             });
 

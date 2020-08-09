@@ -10,7 +10,7 @@
         }
     },
     "dependencies": {
-        "@babel/runtime": "^7.11.1",
+        "@babel/runtime": "^7.11.2",
         "decimal.js": "^10.2.0",
         "tslib": "^2.0.0"
     },

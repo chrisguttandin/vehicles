@@ -12,7 +12,6 @@
     "dependencies": {
         "@babel/runtime": "^7.22.10",
         "decimal.js": "^10.4.3",
-        "linked": "^0.2.0",
         "tslib": "^2.6.1"
     },
     "description": "A little test utility to travel into the future.",

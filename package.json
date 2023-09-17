@@ -17,7 +17,7 @@
     "description": "A little test utility to travel into the future.",
     "devDependencies": {
         "@babel/cli": "^7.22.15",
-        "@babel/core": "^7.22.19",
+        "@babel/core": "^7.22.20",
         "@babel/plugin-external-helpers": "^7.22.5",
         "@babel/plugin-transform-runtime": "^7.22.15",
         "@babel/preset-env": "^7.22.15",

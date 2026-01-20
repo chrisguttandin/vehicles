@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it } from 'vitest';
 import { DeLorean } from '../../src/de-lorean';
 import { spy } from 'sinon';
 
@@ -190,7 +191,9 @@ describe('DeLorean', () => {
                 });
             });
 
-            it('shoud throw an error', (done) => {
+            it('shoud throw an error', () => {
+                const { promise, resolve } = Promise.withResolvers();
+
                 deLorean
                     .travel(9)
                     .then(() => expect(func).to.have.not.been.called)
@@ -198,8 +201,10 @@ describe('DeLorean', () => {
                     .catch((err) => {
                         expect(err.message).to.equal("Sorry, it's not allowed to initialize a promise within a scheduled function.");
 
-                        done();
+                        resolve();
                     });
+
+                return promise;
             });
         });
 

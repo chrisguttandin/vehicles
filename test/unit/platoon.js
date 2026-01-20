@@ -1,14 +1,17 @@
+import { beforeEach, describe, expect, it } from 'vitest';
 import { spy, stub } from 'sinon';
 import { DeLorean } from '../../src/de-lorean';
 import { Platoon } from '../../src/platoon';
 
 describe('Platoon', () => {
-    describe('join()', () => {
+    describe('join()', ({ skip }) => {
         // @todo
+        skip();
     });
 
-    describe('leave()', () => {
+    describe('leave()', ({ skip }) => {
         // @todo
+        skip();
     });
 
     describe('reset()', () => {

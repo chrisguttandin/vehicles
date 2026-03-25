@@ -1,6 +1,5 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { DeLorean } from '../../src/de-lorean';
-import { spy } from 'sinon';
 
 describe('DeLorean', () => {
     let deLorean;
@@ -142,7 +141,7 @@ describe('DeLorean', () => {
             let func;
 
             beforeEach(() => {
-                func = spy();
+                func = vi.fn();
 
                 deLorean.schedule(10, func);
             });
@@ -162,7 +161,7 @@ describe('DeLorean', () => {
             let func;
 
             beforeEach(() => {
-                func = spy();
+                func = vi.fn();
 
                 deLorean.schedule(10, () => {
                     return Promise.resolve().then(func);
@@ -182,7 +181,7 @@ describe('DeLorean', () => {
             let func;
 
             beforeEach(() => {
-                func = spy();
+                func = vi.fn();
 
                 deLorean.schedule(10, () => {
                     return new Promise((resolve) => {
@@ -212,7 +211,7 @@ describe('DeLorean', () => {
             let functions;
 
             beforeEach(() => {
-                functions = [spy(), spy()];
+                functions = [vi.fn(), vi.fn()];
 
                 deLorean.schedule(10, functions[0]);
                 deLorean.schedule(10, functions[1]);
@@ -236,7 +235,7 @@ describe('DeLorean', () => {
             let position;
 
             beforeEach(() => {
-                func = spy();
+                func = vi.fn();
                 position = 10;
 
                 const ticket = deLorean.schedule(position, func);

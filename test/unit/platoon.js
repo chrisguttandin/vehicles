@@ -1,5 +1,4 @@
-import { beforeEach, describe, expect, it } from 'vitest';
-import { spy, stub } from 'sinon';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 import { DeLorean } from '../../src/de-lorean';
 import { Platoon } from '../../src/platoon';
 
@@ -19,7 +18,7 @@ describe('Platoon', () => {
         let vehicles;
 
         beforeEach(() => {
-            vehicles = [{ deLorean: { reset: spy() } }, { deLorean: { reset: spy() } }];
+            vehicles = [{ deLorean: { reset: vi.fn() } }, { deLorean: { reset: vi.fn() } }];
 
             platoon = new Platoon(...vehicles);
         });
@@ -45,8 +44,8 @@ describe('Platoon', () => {
                 { deLorean: new DeLorean(), scale: 1 }
             ];
 
-            stub(vehicles[0].deLorean, 'travel').callThrough();
-            stub(vehicles[1].deLorean, 'travel').callThrough();
+            vi.spyOn(vehicles[0].deLorean, 'travel');
+            vi.spyOn(vehicles[1].deLorean, 'travel');
 
             platoon = new Platoon(...vehicles);
         });
@@ -56,9 +55,9 @@ describe('Platoon', () => {
                 platoon.travel(distance);
 
                 expect(vehicles[0].deLorean.travel).to.have.been.calledOnce;
-                expect(vehicles[0].deLorean.travel).to.have.been.calledWithExactly(distance * vehicles[0].scale);
+                expect(vehicles[0].deLorean.travel).to.have.been.calledWith(distance * vehicles[0].scale);
                 expect(vehicles[1].deLorean.travel).to.have.been.calledOnce;
-                expect(vehicles[1].deLorean.travel).to.have.been.calledWithExactly(distance * vehicles[1].scale);
+                expect(vehicles[1].deLorean.travel).to.have.been.calledWith(distance * vehicles[1].scale);
             });
         });
 
@@ -74,11 +73,11 @@ describe('Platoon', () => {
             it('should call travel() for each stopover on each deLorean with the scaled distance', () => {
                 return platoon.travel(distance).then(() => {
                     expect(vehicles[0].deLorean.travel).to.have.been.calledTwice;
-                    expect(vehicles[0].deLorean.travel).to.have.been.calledWithExactly(position * vehicles[0].scale);
-                    expect(vehicles[0].deLorean.travel).to.have.been.calledWithExactly((distance - position) * vehicles[0].scale);
+                    expect(vehicles[0].deLorean.travel).to.have.been.calledWith(position * vehicles[0].scale);
+                    expect(vehicles[0].deLorean.travel).to.have.been.calledWith((distance - position) * vehicles[0].scale);
                     expect(vehicles[1].deLorean.travel).to.have.been.calledTwice;
-                    expect(vehicles[1].deLorean.travel).to.have.been.calledWithExactly(position * vehicles[1].scale);
-                    expect(vehicles[1].deLorean.travel).to.have.been.calledWithExactly((distance - position) * vehicles[1].scale);
+                    expect(vehicles[1].deLorean.travel).to.have.been.calledWith(position * vehicles[1].scale);
+                    expect(vehicles[1].deLorean.travel).to.have.been.calledWith((distance - position) * vehicles[1].scale);
                 });
             });
         });
@@ -88,7 +87,7 @@ describe('Platoon', () => {
             let position;
 
             beforeEach(() => {
-                func = spy();
+                func = vi.fn();
                 position = 1;
 
                 new Promise((resolve) => {

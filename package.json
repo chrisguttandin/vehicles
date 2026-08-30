@@ -60,6 +60,7 @@
     "main": "build/node/module.js",
     "module": "build/es2019/module.js",
     "name": "vehicles",
+    "packageManager": "npm@12",
     "repository": {
         "type": "git",
         "url": "https://github.com/chrisguttandin/vehicles.git"
